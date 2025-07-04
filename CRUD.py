@@ -11,7 +11,7 @@ tareas = {
     "2": {"titulo": "Hacer ejercicio", "completada": True, "fecha": "2025-04-04"}
 }
 
-# Función para validar la fecha
+# Validacion de la fecha
 def validar_fecha(fecha_str):
     try:
         fecha = datetime.strptime(fecha_str, "%Y-%m-%d").date()
@@ -21,6 +21,17 @@ def validar_fecha(fecha_str):
         return True, ""
     except ValueError:
         return False, "Formato de fecha inválido. Usa YYYY-MM-DD"
+
+@app.route('/tareas', methods=['GET'])
+def listar_tareas():
+    """
+    Obtiene la lista de todas las tareas
+    ---
+    responses:
+      200:
+        description: Lista de tareas
+    """
+    return jsonify(tareas), 200
 
 @app.route('/tarea', methods=['POST'])
 def crear_tarea():
@@ -148,17 +159,6 @@ def eliminar_tarea(id):
         del tareas[id]
         return jsonify({"mensaje": "Tarea eliminada"}), 200
     return jsonify({"error": "Tarea no encontrada"}), 404
-
-@app.route('/tareas', methods=['GET'])
-def listar_tareas():
-    """
-    Obtiene la lista de todas las tareas
-    ---
-    responses:
-      200:
-        description: Lista de tareas
-    """
-    return jsonify(tareas), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
